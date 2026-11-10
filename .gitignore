@@ -1,0 +1,17 @@
+# Archivos locales de referencia (no subir al repositorio)
+files/
+
+# Python / Jupyter / Spyder
+.ipynb_checkpoints/
+__pycache__/
+*.pyc
+.venv/
+venv/
+.env
+.spyproject/
+.ropeproject/
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+*.log
