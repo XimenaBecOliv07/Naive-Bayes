@@ -55,12 +55,24 @@ def revisar_nulos_y_duplicados(df):
     return total_nulos, duplicados
 
 
+def estadisticas_descriptivas(df):
+    """Muestra media, mediana, desviación estándar, mínimo y máximo de cada variable."""
+    titulo("3. Estadísticas descriptivas")
+    # describe() calcula las estadísticas por columna; .T la voltea para que
+    # cada variable quede en una fila y se lea mejor.
+    resumen = df.describe().T[["mean", "50%", "std", "min", "max"]]
+    resumen.columns = ["media", "mediana", "desv_std", "minimo", "maximo"]
+    print(resumen.round(3).to_string())
+    return resumen
+
+
 def main():
     df = pd.read_csv(RUTA_CSV)
     print(f"Archivo leído: {RUTA_CSV.relative_to(RAIZ)}")
 
     filas, columnas = describir_estructura(df)
     total_nulos, duplicados = revisar_nulos_y_duplicados(df)
+    estadisticas_descriptivas(df)
 
 
 if __name__ == "__main__":
