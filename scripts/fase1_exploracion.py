@@ -40,11 +40,27 @@ def describir_estructura(df):
     return filas, columnas
 
 
+def revisar_nulos_y_duplicados(df):
+    """Cuenta los valores nulos y las filas que están repetidas."""
+    titulo("2. Valores nulos y filas duplicadas")
+    # isna() marca True en cada celda vacía; el primer sum() suma por columna
+    # y el segundo suma todas las columnas.
+    total_nulos = int(df.isna().sum().sum())
+    # duplicated() marca True en cada fila idéntica a una anterior;
+    # al sumar booleanos, cada True cuenta como 1.
+    duplicados = int(df.duplicated().sum())
+    print(f"Valores nulos en total: {total_nulos}")
+    print(f"Filas duplicadas: {duplicados}")
+    print(f"Filas que quedarían sin duplicados: {len(df) - duplicados}")
+    return total_nulos, duplicados
+
+
 def main():
     df = pd.read_csv(RUTA_CSV)
     print(f"Archivo leído: {RUTA_CSV.relative_to(RAIZ)}")
 
     filas, columnas = describir_estructura(df)
+    total_nulos, duplicados = revisar_nulos_y_duplicados(df)
 
 
 if __name__ == "__main__":
