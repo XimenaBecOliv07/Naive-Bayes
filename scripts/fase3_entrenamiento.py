@@ -8,7 +8,6 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 
 RAIZ = Path(__file__).resolve().parent.parent
-RUTA_RAW = RAIZ / "data" / "raw" / "winequality-red.csv"
 RUTA_LIMPIO = RAIZ / "data" / "processed" / "winequality-red-limpio.csv"
 RUTA_PREDICCIONES = RAIZ / "data" / "processed" / "predicciones.csv"
 
@@ -35,20 +34,9 @@ VAR_SMOOTHING_FINAL = 1e-9
 
 
 def cargar_datos() -> pd.DataFrame:
-    """Carga el CSV limpio de Fase 2 o aplica las reglas del contrato en memoria."""
-    if RUTA_LIMPIO.exists():
-        print(f"Cargando dataset limpio desde: {RUTA_LIMPIO.relative_to(RAIZ)}")
-        return pd.read_csv(RUTA_LIMPIO)
-
-    print("CSV limpio aun no disponible. Procesando CSV crudo temporalmente...")
-    df = pd.read_csv(RUTA_RAW)
-    df.columns = [col.strip().lower().replace(" ", "_") for col in df.columns]
-    df = df.drop_duplicates().reset_index(drop=True)
-
-    df["calidad_bin"] = np.where(df["quality"] >= 6, "bueno", "malo")
-    condiciones = [df["quality"] <= 5, df["quality"] == 6, df["quality"] >= 7]
-    df["calidad_3"] = np.select(condiciones, ["baja", "media", "alta"], default="media")
-    return df
+    """Carga el CSV limpio oficial generado en la Fase 2."""
+    print(f"Cargando dataset limpio desde: {RUTA_LIMPIO.relative_to(RAIZ)}")
+    return pd.read_csv(RUTA_LIMPIO)
 
 
 def crear_pipeline(var_smoothing: float = 1e-9) -> Pipeline:
