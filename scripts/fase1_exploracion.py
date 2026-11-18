@@ -66,6 +66,20 @@ def estadisticas_descriptivas(df):
     return resumen
 
 
+def analizar_quality(df):
+    """Cuenta cuántos lotes hay de cada calificación y qué porcentaje representan."""
+    titulo("4. Distribución de la variable objetivo quality")
+    # value_counts() ordena por frecuencia; sort_index() lo ordena por calificación.
+    conteo = df["quality"].value_counts().sort_index()
+    # normalize=True devuelve proporciones (0 a 1) en lugar de conteos.
+    porcentaje = df["quality"].value_counts(normalize=True).sort_index() * 100
+    tabla = pd.DataFrame({"lotes": conteo, "porcentaje": porcentaje.round(2)})
+    print(tabla.to_string())
+    pct_5_y_6 = porcentaje.loc[[5, 6]].sum()
+    print(f"\nLas calificaciones 5 y 6 juntas son el {pct_5_y_6:.2f}% de los lotes")
+    return conteo
+
+
 def main():
     df = pd.read_csv(RUTA_CSV)
     print(f"Archivo leído: {RUTA_CSV.relative_to(RAIZ)}")
@@ -73,6 +87,7 @@ def main():
     filas, columnas = describir_estructura(df)
     total_nulos, duplicados = revisar_nulos_y_duplicados(df)
     estadisticas_descriptivas(df)
+    conteo = analizar_quality(df)
 
 
 if __name__ == "__main__":
