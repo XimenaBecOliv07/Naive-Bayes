@@ -1,13 +1,22 @@
-## 📌 ¿Qué parte del proyecto entrega este Pull Request?
-- **Integrante:** 
-- **Fase:** 
+## Fase y responsable
 
-## 🛠️ ¿Qué cambios se realizaron?
-- 
-- 
+- **Integrante:**
+- **Fase:**
+- **Revisor (según la tabla de revisión):**
 
-## ✅ Checklist antes de hacer Merge
-- [ ] El código en Jupyter / Spyder ejecuta de principio a fin sin errores
-- [ ] Usé rutas relativas (ej. `data/raw/winequality-red.csv`) y NO rutas de mi computadora (`C:\Users\...`)
-- [ ] Mis archivos están en la carpeta que me corresponde según el README
-- [ ] Documenté mis hallazgos para que el resto del equipo los entienda
+## Qué entrega este pull request
+
+-
+
+## Cómo verificarlo
+
+<!-- Comando o pasos para que el revisor compruebe que funciona. Ejemplo: python scripts/fase2_preprocesamiento.py -->
+
+## Checklist
+
+- [ ] Solo modifiqué los archivos que me corresponden.
+- [ ] El código corre de principio a fin sin errores desde la raíz del proyecto.
+- [ ] Usé rutas relativas, no rutas de mi computadora.
+- [ ] Cumplí los criterios de aceptación de mi guía.
+- [ ] Los commits siguen el formato `tipo(faseN): descripción`.
+- [ ] Documenté mis decisiones y hallazgos en mi reporte `docs/faseN_*.md`.
