@@ -97,3 +97,32 @@ La rúbrica habla de 12 atributos: son las 11 variables predictoras (lo que el m
 | 11 | `alcohol` | % del volumen | Porcentaje de alcohol producido en la fermentación. | Da cuerpo al vino. Se espera que los vinos con más alcohol reciban mejores calificaciones. |
 | 12 | `quality` | escala de 0 a 10 | Mediana de las calificaciones de al menos tres catadores. | **Variable objetivo**: es lo que el modelo tiene que predecir. |
 
+## 4. Hallazgos y qué implican para las siguientes fases
+
+### 4.1 No hay valores nulos
+Las 1,599 filas tienen las 12 columnas completas. No hace falta rellenar ni eliminar datos faltantes.
+
+### 4.2 Hay 240 filas duplicadas
+Son filas idénticas en las 12 columnas. Si se dejan, al dividir los datos en entrenamiento y prueba una copia puede quedar de cada lado: el modelo "ya vio" ese lote al entrenar y acierta en la prueba sin mérito, lo que **infla el accuracy**.
+
+**Para la fase 2:** eliminar los duplicados antes de cualquier otra cosa. Quedan **1,359 lotes**.
+
+### 4.3 Las clases de `quality` están desbalanceadas
+El 82.49% de los lotes tiene calificación 5 o 6. En cambio, solo hay 10 lotes con calificación 3 y 18 con calificación 8. Con tan pocos ejemplos, el modelo no tiene de dónde aprender cómo es un vino de 3 o de 8, y tiende a predecir siempre las clases que más se repiten.
+
+**Para las fases 2 y 3:** por eso el equipo agrupa `quality` en clases más grandes (ver contrato de datos del README):
+
+| Columna | Regla | Lotes después de quitar duplicados |
+|---|---|---|
+| `calidad_bin` | `bueno` si quality >= 6, `malo` si quality <= 5 | 719 bueno y 640 malo |
+| `calidad_3` | `baja` <= 5, `media` = 6, `alta` >= 7 | 640 baja, 535 media y 184 alta |
+
+El corte binario en 6 deja dos clases casi del mismo tamaño, lo que hace al problema mucho más manejable.
+
+### 4.4 Las variables están en escalas distintas y tienen valores extremos
+Como se ve en las estadísticas descriptivas, unas variables van de 0.99 a 1.00 y otras de 6 a 289, y varias tienen máximos muy alejados de la mediana.
+
+**Para la fase 2:** revisar los valores extremos con diagramas de caja y decidir si son errores o lotes reales que el modelo debe aprender a reconocer. El escalado no se hace en el CSV limpio: le corresponde al pipeline del modelo en la fase 3.
+
+### 4.5 Las mediciones permiten predecir temprano
+Las 11 variables se miden en el laboratorio antes de la cata. Si el modelo logra relacionarlas con la calidad, la bodega puede identificar lotes en riesgo antes de distribuirlos, que es justo el objetivo del proyecto.
