@@ -115,6 +115,20 @@ def graficar_quality(df):
     print(f"Figura guardada en: {RUTA_FIGURA.relative_to(RAIZ)}")
 
 
+def validar_criterios(filas, columnas, total_nulos, duplicados, conteo):
+    """Comprueba que las cifras coinciden con los criterios de aceptación de la guía.
+
+    Si alguna no coincide, assert detiene el script con un mensaje de error.
+    """
+    titulo("6. Validación de criterios de aceptación")
+    conteo_esperado = {3: 10, 4: 53, 5: 681, 6: 638, 7: 199, 8: 18}
+    assert (filas, columnas) == (1599, 12), "Se esperaban 1,599 filas y 12 columnas"
+    assert total_nulos == 0, "Se esperaban 0 valores nulos"
+    assert duplicados == 240, "Se esperaban 240 filas duplicadas"
+    assert conteo.to_dict() == conteo_esperado, "Los conteos de quality no coinciden"
+    print("OK: todas las cifras coinciden con la guía de la fase 1.")
+
+
 def main():
     df = pd.read_csv(RUTA_CSV)
     print(f"Archivo leído: {RUTA_CSV.relative_to(RAIZ)}")
@@ -124,6 +138,7 @@ def main():
     estadisticas_descriptivas(df)
     conteo = analizar_quality(df)
     graficar_quality(df)
+    validar_criterios(filas, columnas, total_nulos, duplicados, conteo)
 
 
 if __name__ == "__main__":
