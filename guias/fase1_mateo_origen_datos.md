@@ -138,7 +138,7 @@ Si tus números no coinciden con estos, revisa tu código antes de abrir el PR.
 
 - [ ] El dataset tiene **1,599 filas y 12 columnas**.
 - [ ] Hay **0 valores nulos** y **240 filas duplicadas**.
-- [ ] `quality` solo toma valores del 3 al 8, con estos conteos: 3 → 10, 4 → 53, 5 → 681, 6 → 638, 7 → 199, 8 → 18.
+- [ ] `quality` solo toma valores del 3 al 8, con estos conteos: 3: 10, 4: 53, 5: 681, 6: 638, 7: 199, 8: 18.
 - [ ] El script corre de principio a fin sin errores desde la raíz del proyecto.
 - [ ] La figura está en `docs/figuras/` y tiene título y ejes legibles.
 - [ ] El reporte explica las 12 variables con tus palabras y cita la fuente.

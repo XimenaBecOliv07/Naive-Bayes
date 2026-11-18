@@ -230,20 +230,20 @@ La forma de trabajar (commits, pull requests, turnos del notebook y comunicació
 
 ```text
 Naive-Bayes/
-├── data/
-│   ├── raw/winequality-red.csv        Dataset original (no se modifica)
-│   └── processed/                     CSV generados por las fases 2 y 3
-├── scripts/                           Un script por fase (fase1_..., fase2_..., fase3_...)
-├── notebooks/NaiveBayes.ipynb         Notebook integrador (lo escribimos entre todos)
-├── docs/
-│   ├── figuras/                       Gráficas, con prefijo de la fase (fase1_..., fase3_...)
-│   ├── dashboard/                     Fase 4: .pbix, capturas y guía de Power BI
-│   ├── presentacion/                  Fase 5: .pptx y guion de defensa
-│   └── faseN_*.md                     Reporte escrito de cada fase
-├── guias/                             Guía de aprendizaje de cada fase
-├── INSTRUCCIONES_GENERALES.md         Cómo trabajamos como equipo
-├── requirements.txt                   Librerías de Python
-└── README.md                          Este archivo
+|-- data/
+|   |-- raw/winequality-red.csv        Dataset original (no se modifica)
+|   `-- processed/                     CSV generados por las fases 2 y 3
+|-- scripts/                           Un script por fase (fase1_..., fase2_..., fase3_...)
+|-- notebooks/NaiveBayes.ipynb         Notebook integrador (lo escribimos entre todos)
+|-- docs/
+|   |-- figuras/                       Gráficas, con prefijo de la fase (fase1_..., fase3_...)
+|   |-- dashboard/                     Fase 4: .pbix, capturas y guía de Power BI
+|   |-- presentacion/                  Fase 5: .pptx y guion de defensa
+|   `-- faseN_*.md                     Reporte escrito de cada fase
+|-- guias/                             Guía de aprendizaje de cada fase
+|-- INSTRUCCIONES_GENERALES.md         Cómo trabajamos como equipo
+|-- requirements.txt                   Librerías de Python
+`-- README.md                          Este archivo
 ```
 
 ## 9. Resultados

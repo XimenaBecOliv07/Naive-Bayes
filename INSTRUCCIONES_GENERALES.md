@@ -205,7 +205,7 @@ Tu turno empieza cuando tu fase ya está en `main` y la persona anterior liberó
 
 ### Pasos de tu turno
 
-1. Avisa por WhatsApp: `[NOTEBOOK] tomo · tu nombre`.
+1. Avisa por WhatsApp: `[NOTEBOOK] tomo - tu nombre`.
 2. Cambia a la rama del notebook y actualízala:
    ```bash
    git switch notebook-integrador
@@ -222,7 +222,7 @@ Tu turno empieza cuando tu fase ya está en `main` y la persona anterior liberó
    git commit -m "feat(fase2): agregar seccion de preprocesamiento al notebook"
    git push origin notebook-integrador
    ```
-7. Avisa por WhatsApp: `[NOTEBOOK] libero · tu nombre`.
+7. Avisa por WhatsApp: `[NOTEBOOK] libero - tu nombre`.
 8. Regresa a tu rama: `git switch nombre-de-tu-rama`.
 
 Al terminar el turno 6 se abre un pull request de `notebook-integrador` hacia `main`. Lo revisa todo el equipo.
@@ -233,13 +233,13 @@ Fija en el grupo un mensaje con la tabla de hitos de la sección 2 y márcala co
 
 | Prefijo | Uso | Ejemplo |
 |---|---|---|
-| `[INICIO]` | Empiezas a trabajar | `[INICIO] Pamela · fase2 · arranco limpieza` |
-| `[PR]` | Abriste un pull request | `[PR] Pamela · fase2 · <link> · listo para revisar` |
-| `[MERGE]` | Hiciste merge a `main` | `[MERGE] fase2 en main · Braulio y Octavio hagan pull` |
-| `[MODELO]` | Octavio comparte la configuración final | `[MODELO] variables: ... · var_smoothing: ...` |
-| `[NOTEBOOK]` | Tomas o liberas el notebook | `[NOTEBOOK] tomo · Mateo` |
-| `[BLOQUEO]` | Llevas más de 30 minutos trabado | `[BLOQUEO] Braulio · fase3 · no carga el csv` |
-| `[LISTO]` | Terminaste tu fase | `[LISTO] Mateo · fase1` |
+| `[INICIO]` | Empiezas a trabajar | `[INICIO] Pamela - fase2 - arranco limpieza` |
+| `[PR]` | Abriste un pull request | `[PR] Pamela - fase2 - <link> - listo para revisar` |
+| `[MERGE]` | Hiciste merge a `main` | `[MERGE] fase2 en main - Braulio y Octavio hagan pull` |
+| `[MODELO]` | Octavio comparte la configuración final | `[MODELO] variables: ... - var_smoothing: ...` |
+| `[NOTEBOOK]` | Tomas o liberas el notebook | `[NOTEBOOK] tomo - Mateo` |
+| `[BLOQUEO]` | Llevas más de 30 minutos trabado | `[BLOQUEO] Braulio - fase3 - no carga el csv` |
+| `[LISTO]` | Terminaste tu fase | `[LISTO] Mateo - fase1` |
 
 ## 8. Defensa (26 de noviembre, 30 minutos)
 
