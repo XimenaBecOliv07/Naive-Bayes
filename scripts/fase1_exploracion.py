@@ -12,13 +12,18 @@ Uso (desde la raíz del proyecto):
 
 from pathlib import Path
 
+import matplotlib.pyplot as plt
 import pandas as pd
+import seaborn as sns
 
 # Las rutas se calculan a partir de la ubicación de este archivo
 # (scripts/ -> parents[1] es la raíz), así el script funciona sin importar
 # desde qué carpeta se ejecute ni en qué computadora.
 RAIZ = Path(__file__).resolve().parents[1]
 RUTA_CSV = RAIZ / "data" / "raw" / "winequality-red.csv"
+RUTA_FIGURA = RAIZ / "docs" / "figuras" / "fase1_distribucion_quality.png"
+
+COLOR_VINO = "#722F37"  # color del proyecto
 
 
 def titulo(texto):
@@ -80,6 +85,36 @@ def analizar_quality(df):
     return conteo
 
 
+def graficar_quality(df):
+    """Genera la gráfica de barras de quality y la guarda en docs/figuras/."""
+    titulo("5. Gráfica de la distribución de quality")
+    RUTA_FIGURA.parent.mkdir(parents=True, exist_ok=True)
+
+    fig, ax = plt.subplots(figsize=(8, 5))
+    # saturation=1 evita que seaborn aclare el color y respeta el #722F37 exacto.
+    sns.countplot(data=df, x="quality", color=COLOR_VINO, saturation=1, ax=ax)
+
+    # Escribe encima de cada barra el número de lotes y su porcentaje.
+    total = len(df)
+    for barra in ax.patches:
+        alto = int(barra.get_height())
+        x_centro = barra.get_x() + barra.get_width() / 2
+        ax.annotate(f"{alto}\n({alto / total:.1%})", (x_centro, alto),
+                    ha="center", va="bottom", fontsize=9)
+
+    ax.set_title("Distribución de la calidad del vino tinto (dataset original)")
+    ax.set_xlabel("Calificación de calidad (quality)")
+    ax.set_ylabel("Número de lotes")
+    ax.set_ylim(0, df["quality"].value_counts().max() * 1.15)
+    fig.tight_layout()
+
+    # Se guarda ANTES de cerrar: si se muestra o se cierra primero,
+    # en algunos entornos la imagen queda vacía.
+    fig.savefig(RUTA_FIGURA, dpi=150)
+    plt.close(fig)
+    print(f"Figura guardada en: {RUTA_FIGURA.relative_to(RAIZ)}")
+
+
 def main():
     df = pd.read_csv(RUTA_CSV)
     print(f"Archivo leído: {RUTA_CSV.relative_to(RAIZ)}")
@@ -88,6 +123,7 @@ def main():
     total_nulos, duplicados = revisar_nulos_y_duplicados(df)
     estadisticas_descriptivas(df)
     conteo = analizar_quality(df)
+    graficar_quality(df)
 
 
 if __name__ == "__main__":
