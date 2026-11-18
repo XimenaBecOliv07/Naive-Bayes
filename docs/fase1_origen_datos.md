@@ -77,3 +77,23 @@ Aunque la escala va de 0 a 10, en los datos solo aparecen calificaciones del 3 a
 Lo que se lee en esta tabla:
 - Las variables están en **escalas muy distintas**: `density` casi no varía (desviación de 0.002), mientras que `total sulfur dioxide` va de 6 a 289.
 - En varias variables la media es mayor que la mediana y el máximo está muy lejos del resto (`residual sugar`, `chlorides`, `total sulfur dioxide`, `sulphates`). Eso indica **valores extremos** hacia arriba.
+
+## 3. Diccionario de datos
+
+La rúbrica habla de 12 atributos: son las 11 variables predictoras (lo que el modelo usa para predecir) más la variable objetivo `quality` (lo que se quiere predecir). Por eso el modelo trabaja con 11 entradas.
+
+| # | Variable | Unidad | Qué mide | Cómo afecta al vino |
+|:---:|---|---|---|---|
+| 1 | `fixed acidity` | g de ácido tartárico / dm3 | Ácidos que vienen de la uva y no se evaporan (tartárico, málico). | Le dan estructura y frescura. Muy poca deja el vino plano; demasiada lo hace muy ácido. |
+| 2 | `volatile acidity` | g de ácido acético / dm3 | Ácidos que sí se evaporan, sobre todo el ácido acético que producen bacterias durante la fermentación. | Es un **defecto**: en exceso el vino huele y sabe a vinagre. Se espera que a más acidez volátil, peor calidad. |
+| 3 | `citric acid` | g / dm3 | Ácido cítrico, presente en cantidades pequeñas. | Aporta frescura y sabor. 132 lotes (8%) tienen 0. |
+| 4 | `residual sugar` | g / dm3 | Azúcar que queda cuando termina la fermentación. | Define qué tan dulce es el vino. Casi todos los lotes son secos (mediana de 2.2 g/dm3). |
+| 5 | `chlorides` | g de cloruro de sodio / dm3 | Cantidad de sal. | En exceso el vino sabe salado; valores altos pueden indicar un problema en el proceso. |
+| 6 | `free sulfur dioxide` | mg / dm3 | Dióxido de azufre (SO2) libre, la parte que todavía está activa. | Protege al vino contra microbios y contra la oxidación. |
+| 7 | `total sulfur dioxide` | mg / dm3 | SO2 libre más el SO2 que ya se unió a otras moléculas del vino. | Una cantidad moderada conserva el vino; en exceso se percibe un olor picante a azufre. |
+| 8 | `density` | g / cm3 | Densidad del vino comparada con la del agua. | Depende sobre todo del alcohol (lo hace menos denso) y del azúcar (lo hace más denso). |
+| 9 | `pH` | escala de 0 a 14 | Qué tan ácido es el vino; en estos datos va de 2.74 a 4.01. | Un pH bajo hace al vino más estable y ayuda a que el SO2 funcione mejor. |
+| 10 | `sulphates` | g de sulfato de potasio / dm3 | Sulfatos, un aditivo del vino. | Ayudan a aumentar el SO2, que actúa como antimicrobiano y antioxidante. |
+| 11 | `alcohol` | % del volumen | Porcentaje de alcohol producido en la fermentación. | Da cuerpo al vino. Se espera que los vinos con más alcohol reciban mejores calificaciones. |
+| 12 | `quality` | escala de 0 a 10 | Mediana de las calificaciones de al menos tres catadores. | **Variable objetivo**: es lo que el modelo tiene que predecir. |
+
