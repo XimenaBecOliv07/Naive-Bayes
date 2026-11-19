@@ -8,6 +8,8 @@ Created on Tue Nov 17 21:52:32 2026
 from pathlib import Path
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.metrics import ConfusionMatrixDisplay
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import f1_score, precision_score, recall_score
 from sklearn.model_selection import StratifiedKFold, cross_val_score
@@ -124,6 +126,77 @@ print("F1 CV con ese valor:", round(busqueda.best_score_, 4))
 
 metricas_final = evaluar(VARIABLES_FINALES, MEJOR_VAR_SMOOTHING)
 print("Modelo final:", metricas_final)
+
+X_train3, X_test3, y_train3, y_test3 = train_test_split(
+    X,
+    df["calidad_3"],
+    test_size=TEST_SIZE,
+    stratify=df["calidad_3"],
+    random_state=RANDOM_STATE,
+)
+modelo_3 = crear_pipeline().fit(X_train3, y_train3)
+y_pred_3 = modelo_3.predict(X_test3)
+
+metricas_11 = evaluar(VARIABLES_11)
+metricas_3var = evaluar(VARIABLES_FINALES)
+
+comparacion = pd.DataFrame([
+    {"modelo": "Linea base",
+     "accuracy": round(acc_base, 4),
+     "f1_macro": round(f1_score(y_test, y_pred_base, average="macro"), 4)},
+    {"modelo": "3 clases, 11 variables",
+     "accuracy": round(accuracy_score(y_test3, y_pred_3), 4),
+     "f1_macro": round(f1_score(y_test3, y_pred_3, average="macro"), 4)},
+    {"modelo": "Binario, 11 variables",
+     "accuracy": metricas_11["accuracy"],
+     "f1_macro": metricas_11["f1_macro"]},
+    {"modelo": "Binario, 3 variables",
+     "accuracy": metricas_3var["accuracy"],
+     "f1_macro": metricas_3var["f1_macro"]},
+    {"modelo": "Binario optimizado",
+     "accuracy": metricas_final["accuracy"],
+     "f1_macro": metricas_final["f1_macro"]},
+])
+print(comparacion.to_string(index=False))
+
+CARPETA_FIGURAS = RAIZ / "docs" / "figuras"
+
+modelo_final = crear_pipeline(MEJOR_VAR_SMOOTHING).fit(X_train[VARIABLES_FINALES], y_train)
+y_pred_final = modelo_final.predict(X_test[VARIABLES_FINALES])
+
+ConfusionMatrixDisplay.from_predictions(y_test, y_pred_final, cmap="Reds", colorbar=False)
+plt.title("Modelo final - conjunto de prueba (272 lotes)")
+plt.xlabel("Prediccion del modelo")
+plt.ylabel("Clase real")
+plt.tight_layout()
+plt.savefig(CARPETA_FIGURAS / "fase3_matriz_confusion.png", dpi=150)
+plt.close()
+
+ax = comparacion.plot.barh(
+    x="modelo", y=["accuracy", "f1_macro"], color=["#722F37", "#C98B92"], figsize=(8, 4)
+)
+ax.set_xlim(0, 1)
+ax.set_xlabel("Valor en el conjunto de prueba")
+ax.set_ylabel("")
+ax.set_title("Comparacion de configuraciones")
+plt.tight_layout()
+plt.savefig(CARPETA_FIGURAS / "fase3_comparacion_modelos.png", dpi=150)
+plt.close()
+
+metricas_csv = pd.DataFrame({
+    "metrica": ["accuracy", "precision_macro", "recall_macro", "f1_macro", "accuracy_linea_base"],
+    "valor": [
+        metricas_final["accuracy"],
+        metricas_final["precision_macro"],
+        metricas_final["recall_macro"],
+        metricas_final["f1_macro"],
+        round(acc_base, 4),
+    ],
+})
+metricas_csv.to_csv(CSV_METRICAS, index=False)
+print(metricas_csv.to_string(index=False))
+
+
 
 
 
