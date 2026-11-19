@@ -90,4 +90,24 @@ def evaluar(variables, var_smoothing=1e-9):
 VARIABLES_11 = list(X.columns)
 print(evaluar(VARIABLES_11))
 
+quality_train = df.loc[X_train.index, "quality"]
+correlaciones = X_train.corrwith(quality_train).abs().sort_values(ascending=False)
+print("\nCorrelacion |r| con quality (solo entrenamiento):")
+print(correlaciones.round(3))
+
+resultados_k = []
+for k in [3, 5, 7, 9, 11]:
+    variables_k = list(correlaciones.index[:k])
+    resultados_k.append(evaluar(variables_k))
+
+tabla_k = pd.DataFrame(resultados_k)
+print(tabla_k.to_string(index=False))
+
+mejor_k = int(tabla_k.loc[tabla_k["f1_cv"].idxmax(), "n_variables"])
+VARIABLES_FINALES = list(correlaciones.index[:mejor_k])
+print("Mejor numero de variables segun F1 de CV:", mejor_k)
+print("Variables finales:", VARIABLES_FINALES)
+
+
+
 
