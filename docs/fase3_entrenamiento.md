@@ -11,7 +11,7 @@ El clasificador Naive Bayes estima la probabilidad de que un lote de vino perten
 $$P(C_k \mid \mathbf{x}) = \frac{P(C_k) \, P(\mathbf{x} \mid C_k)}{P(\mathbf{x})}$$
 
 Cada componente tiene una interpretación directa en la bodega:
-- **Probabilidad a priori $P(C_k)$:** Es la frecuencia histórica de cada clase en los datos de entrenamiento antes de observar el análisis químico del lote (en los 1,359 lotes limpios: 53.1 % `bueno` y 46.9 % `malo`).
+- **Probabilidad a priori $P(C_k)$:** Es la frecuencia histórica de cada clase en los datos de entrenamiento antes de observar el análisis químico del lote (en los 1,359 lotes limpios: 52.9 % `bueno` y 47.1 % `malo`).
 - **Verosimilitud $P(\mathbf{x} \mid C_k)$:** Mide qué tan probable es observar esa combinación específica de acidez, alcohol, sulfatos y demás variables asumiendo que el lote pertenece a la clase $C_k$.
 - **Evidencia $P(\mathbf{x})$:** Factor de normalización constante para todas las clases, que garantiza que las probabilidades sumen 1.
 - **Probabilidad a posteriori $P(C_k \mid \mathbf{x})$:** Probabilidad final que entrega el modelo (`prob_bueno`) para decidir si el lote está en riesgo o no.
@@ -55,17 +55,18 @@ Para asegurar una evaluación honesta y reproducible en conjunto con la Fase 3B,
 |---|---|---|---:|---:|---:|
 | 1. Tres clases | `calidad_3` (`baja`, `media`, `alta`) | 11 fisicoquímicas | `1e-9` | 0.5809 | 0.5596 |
 | 2. Binario completo | `calidad_bin` (`bueno`, `malo`) | 11 fisicoquímicas | `1e-9` | 0.7353 | 0.7346 |
-| 3. Binario final (preliminar) | `calidad_bin` (`bueno`, `malo`) | Pendiente confirmación Fase 3B (11 vars preliminar) | `1e-9` | 0.7353 | 0.7346 |
+| 3. Binario final | `calidad_bin` (`bueno`, `malo`) | 3 (`alcohol`, `volatile_acidity`, `sulphates`) | `1.0` | **0.7500** | **0.7493** |
 
 **Interpretación técnica:**
 - En el **Experimento 1 (3 clases)** el desempeño cae a `0.5809` de accuracy y `0.5596` de F1 macro porque la clase `media` (`quality == 6`, 107 lotes en prueba) comparte propiedades químicas intermedias con `baja` y `alta`, mientras que `alta` (`quality >= 7`, solo 37 lotes en prueba) sufre un fuerte desbalance que limita su F1 a `0.4932`.
 - En el **Experimento 2 (binario con 11 variables)**, al plantear el problema de negocio como detección de lotes en riesgo (`malo` $\le 5$ vs. `bueno` $\ge 6$), el accuracy sube a `0.7353` y el F1 macro a `0.7346`, equilibrando el desempeño entre ambas clases.
+- En el **Experimento 3 (binario final con configuración de Fase 3B)**, al conservar únicamente las 3 variables más informativas y con menor colinealidad (`alcohol`, `volatile_acidity`, `sulphates`) junto con `var_smoothing=1.0`, el desempeño alcanza **0.7500 de accuracy** y **0.7493 de F1 macro**, confirmando que eliminar variables redundantes ayuda a respetar el supuesto de independencia de Naive Bayes.
 
 ## 6. Generación de predicciones honestas para el Dashboard (`predicciones.csv`)
 
 El dashboard de Power BI (Fase 4) requiere una predicción (`y_pred`) y una probabilidad (`prob_bueno`) para cada uno de los **1,359 lotes**. Entrenar un modelo con los 1,359 lotes y predecir sobre esos mismos lotes produciría métricas artificialmente infladas porque el modelo evaluaría datos que ya memorizó.
 
-Para evitarlo, se utilizó `cross_val_predict` con `StratifiedKFold(n_splits=5, shuffle=True, random_state=42)` y `method="predict_proba"`:
+Para evitarlo, se utilizó `cross_val_predict` con `StratifiedKFold(n_splits=5, shuffle=True, random_state=42)` y `method="predict_proba"` sobre el modelo final (3 variables y `var_smoothing=1.0`):
 - El dataset se divide en 5 pliegues estratificados; cada lote es predicho únicamente por el pipeline entrenado con los 4 pliegues restantes.
 - Se identificó el índice de la clase `"bueno"` mediante el atributo `classes_` del clasificador para extraer `prob_bueno` y se asignó `y_pred` a la clase con mayor probabilidad (`np.argmax`).
-- Se exportó `data/processed/predicciones.csv` con **1,359 filas y 20 columnas** (las 14 del CSV limpio más `id_lote`, `y_real`, `y_pred`, `prob_bueno`, `acierto` y `lote_en_riesgo`), obteniendo un accuracy global de validación cruzada de **0.7226** y **655 lotes detectados en riesgo** en la corrida preliminar.
+- Se exportó `data/processed/predicciones.csv` con **1,359 filas y 20 columnas** (las 14 del CSV limpio más `id_lote`, `y_real`, `y_pred`, `prob_bueno`, `acierto` y `lote_en_riesgo`), obteniendo un accuracy global de validación cruzada de **0.7292** y **676 lotes detectados en riesgo**.

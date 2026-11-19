@@ -29,8 +29,8 @@ VARIABLES_11 = [
 ]
 
 # Preliminar con 11 variables; actualizar cuando Octavio envie [MODELO]
-VARIABLES_SELECCIONADAS = VARIABLES_11
-VAR_SMOOTHING_FINAL = 1e-9
+VARIABLES_SELECCIONADAS = ["alcohol", "volatile_acidity", "sulphates"]
+VAR_SMOOTHING_FINAL = 1.0
 
 
 def cargar_datos() -> pd.DataFrame:
