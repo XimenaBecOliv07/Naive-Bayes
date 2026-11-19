@@ -7,6 +7,8 @@ Created on Tue Nov 17 21:52:32 2026
 """
 from pathlib import Path
 import pandas as pd
+import numpy as np
+from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import f1_score, precision_score, recall_score
 from sklearn.model_selection import StratifiedKFold, cross_val_score
 from sklearn.naive_bayes import GaussianNB
@@ -107,6 +109,21 @@ mejor_k = int(tabla_k.loc[tabla_k["f1_cv"].idxmax(), "n_variables"])
 VARIABLES_FINALES = list(correlaciones.index[:mejor_k])
 print("Mejor numero de variables segun F1 de CV:", mejor_k)
 print("Variables finales:", VARIABLES_FINALES)
+
+busqueda = GridSearchCV(
+    crear_pipeline(),
+    param_grid={"nb__var_smoothing": np.logspace(-9, 2, 23)},
+    cv=CV,
+    scoring="f1_macro",
+)
+busqueda.fit(X_train[VARIABLES_FINALES], y_train)
+
+MEJOR_VAR_SMOOTHING = float(busqueda.best_params_["nb__var_smoothing"])
+print("Mejor var_smoothing:", MEJOR_VAR_SMOOTHING)
+print("F1 CV con ese valor:", round(busqueda.best_score_, 4))
+
+metricas_final = evaluar(VARIABLES_FINALES, MEJOR_VAR_SMOOTHING)
+print("Modelo final:", metricas_final)
 
 
 
