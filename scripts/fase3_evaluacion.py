@@ -8,6 +8,8 @@ Created on Tue Nov 17 21:52:32 2026
 from pathlib import Path
 import pandas as pd
 from sklearn.model_selection import train_test_split
+from sklearn.dummy import DummyClassifier
+from sklearn.metrics import accuracy_score
 
 RAIZ = Path(__file__).resolve().parents[1]
 
@@ -42,3 +44,8 @@ X_train, X_test, y_train, y_test = train_test_split(
 print(len(X_test))
 print(y_test.value_counts())
 
+base = DummyClassifier(strategy="most_frequent")
+base.fit(X_train, y_train)
+y_pred_base = base.predict(X_test)
+acc_base = accuracy_score(y_test, y_pred_base)
+print("Accuracy linea base:", round(acc_base, 4))
