@@ -258,4 +258,4 @@ metricas_csv = pd.DataFrame({
     ],
 })
 metricas_csv.to_csv(CSV_METRICAS, index=False)
-print(metricas_csv.to_string(index=False))aho
+print(metricas_csv.to_string(index=False))
