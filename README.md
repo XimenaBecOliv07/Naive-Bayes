@@ -248,14 +248,19 @@ Naive-Bayes/
 
 ## 9. Resultados
 
-Esta sección se completa al cerrar la fase 3B.
+Resultados obtenidos sobre el conjunto de prueba reservado (272 lotes, partición 80/20 estratificada con `random_state=42`):
 
 | Configuración | Accuracy | F1 macro |
-|---|---|---|
-| Línea base (clase mayoritaria) | Pendiente | n/a |
-| 3 clases, 11 variables | Pendiente | Pendiente |
-| Binario, 11 variables | Pendiente | Pendiente |
-| Binario, variables seleccionadas (final) | Pendiente | Pendiente |
+|---|---:|---:|
+| Línea base (`DummyClassifier`, clase mayoritaria) | 0.5294 | 0.3462 |
+| 3 clases, 11 variables | 0.5809 | 0.5596 |
+| Binario, 11 variables | 0.7353 | 0.7346 |
+| Binario, 3 variables (`var_smoothing=1e-9`) | 0.7537 | 0.7531 |
+| **Binario, 3 variables + `var_smoothing=1.0` (final)** | **0.7500** | **0.7493** |
+
+- **Variables finales:** `alcohol`, `volatile_acidity` y `sulphates` (seleccionadas por validación cruzada de 5 pliegues sobre entrenamiento).
+- **Métricas del modelo final (`metricas_modelo.csv`):** accuracy `0.7500`, precision macro `0.7492`, recall macro `0.7496`, F1 macro `0.7493`.
+- **Predicciones fuera de muestra (`predicciones.csv`, 5-fold CV sobre los 1,359 lotes):** accuracy global `0.7292` (991 aciertos) y **676 lotes detectados en riesgo** (`49.74 %`).
 
 ## 10. Cómo reproducir el proyecto
 
